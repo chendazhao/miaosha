@@ -81,6 +81,21 @@ public class RedisService {
     }
 
     /**
+     * 删除
+     * */
+    public boolean delete(KeyPrefix keyPrefix, String key) {
+        Jedis jedis = null;
+        try {
+            jedis =  jedisPool.getResource();
+            String keyWillBeDeleted=keyPrefix.getPrefix()+key;
+            long ret=jedis.del(keyWillBeDeleted);
+            return ret>0;
+        }finally {
+            returnToPool(jedis);
+        }
+    }
+
+    /**
      * 增加值
      * */
     public <T> Long incr(KeyPrefix keyPrefix, String key) {
