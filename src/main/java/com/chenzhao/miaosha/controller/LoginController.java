@@ -40,7 +40,7 @@ public class LoginController {
     }
     @RequestMapping("do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response,@Valid LoginVo loginVo){
+    public Result<String> doLogin(HttpServletResponse response,@Valid LoginVo loginVo){
         log.info(loginVo.toString());
         //参数校验
 //        String passInput=loginVo.getPassword();
@@ -55,8 +55,10 @@ public class LoginController {
 //            return Result.error(CodeMsg.MOBILE_ERROR);
 //        }
         //登录功能
-            miaoshaUserService.login(response,loginVo);
+        //原来返回的是boolean类型的值，现在为了测试方便，将返回类型改为string类型，也就是token
+          //  miaoshaUserService.login(response,loginVo);
+        String token=miaoshaUserService.login(response,loginVo);
 
-        return Result.success(true);
+        return Result.success(token);
     }
 }

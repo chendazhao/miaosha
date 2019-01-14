@@ -1,6 +1,7 @@
 package com.chenzhao.miaosha.controller;
 
 import com.chenzhao.miaosha.domain.User;
+import com.chenzhao.miaosha.rabbitmq.MQSender;
 import com.chenzhao.miaosha.redis.RedisService;
 import com.chenzhao.miaosha.redis.UserKey;
 import com.chenzhao.miaosha.result.Result;
@@ -29,6 +30,9 @@ public class SampleController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private MQSender mqSender;
 
     //thymeleaf模板的使用的演示
     @RequestMapping("thymeleaf")
@@ -67,4 +71,33 @@ public class SampleController {
         User user1=redisService.get(UserKey.getById,""+1,User.class);
         return Result.success(user1);
     }
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq(){
+        mqSender.send("hello chenzhao");
+        return Result.success("hello chenzhao");
+    }
+
+    @RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> topic(){
+        mqSender.sendTopic("hello chenzhao");
+        return Result.success("hello chenzhao");
+    }
+
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> fanout(){
+        mqSender.sendFanout("hello chenzhao");
+        return Result.success("hello chenzhao");
+    }
+
+    @RequestMapping("/mq/headers")
+    @ResponseBody
+    public Result<String> headers(){
+        mqSender.sendHeaders("hello chenzhao");
+        return Result.success("hello chenzhao");
+    }
+
+
 }
